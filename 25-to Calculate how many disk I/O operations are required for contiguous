@@ -1,0 +1,34 @@
+#include <stdio.h>
+#define FILE_SIZE 100
+int contiguousAllocation(int position) {
+    return 1;
+}
+int linkedAllocation(int position) {
+    return 1;
+}
+int indexedAllocation(int position) {
+    int indexBlockSize = 1;
+    int indexBlockIO = 1; 
+    int fileBlockIO = 1; 
+    if (position <= indexBlockSize) {
+        return indexBlockIO + fileBlockIO;
+    } else {
+        return indexBlockIO;
+    }
+}
+int main() {
+    int position;
+    printf("Contiguous Allocation:\n");
+    printf("Adding block at the beginning: %d I/O operations\n", contiguousAllocation(1));
+    printf("Adding block in the middle: %d I/O operations\n", contiguousAllocation(FILE_SIZE / 2));
+    printf("Adding block at the end: %d I/O operations\n", contiguousAllocation(FILE_SIZE));
+    printf("\nLinked Allocation:\n");
+    printf("Adding block at the beginning: %d I/O operations\n", linkedAllocation(1));
+    printf("Adding block in the middle: %d I/O operations\n", linkedAllocation(FILE_SIZE / 2));
+    printf("Adding block at the end: %d I/O operations\n", linkedAllocation(FILE_SIZE));
+    printf("\nIndexed Allocation:\n");
+    printf("Adding block at the beginning: %d I/O operations\n", indexedAllocation(1));
+    printf("Adding block in the middle: %d I/O operations\n", indexedAllocation(FILE_SIZE / 2));
+    printf("Adding block at the end: %d I/O operations\n", indexedAllocation(FILE_SIZE));
+    return 0;
+}
