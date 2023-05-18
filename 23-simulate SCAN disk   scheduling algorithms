@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX_TRACKS 100
+int abs(int x) {
+    return (x < 0) ? -x : x;
+}
+int compare(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+int SCAN(int tracks[], int n, int start, bool direction) {
+    int headMovement = 0;
+    int position = start;
+    int currentIndex;
+    if (direction) {
+        qsort(tracks, n, sizeof(int), compare);
+        for (currentIndex = 0; currentIndex < n; currentIndex++) {
+            if (tracks[currentIndex] >= position)
+                break;
+        }
+        for (; currentIndex < n; currentIndex++) {
+            headMovement += abs(tracks[currentIndex] - position);
+            position = tracks[currentIndex];
+        }
+        for (currentIndex = n - 1; currentIndex >= 0; currentIndex--) {
+            headMovement += abs(tracks[currentIndex] - position);
+            position = tracks[currentIndex];
+        }
+    } else {
+        qsort(tracks, n, sizeof(int), compare);
+        for (currentIndex = n - 1; currentIndex >= 0; currentIndex--) {
+            if (tracks[currentIndex] <= position)
+                break;
+        }
+        for (; currentIndex >= 0; currentIndex--) {
+            headMovement += abs(tracks[currentIndex] - position);
+            position = tracks[currentIndex];
+        }
+        for (currentIndex = 0; currentIndex < n; currentIndex++) {
+            headMovement += abs(tracks[currentIndex] - position);
+            position = tracks[currentIndex];
+        }
+    }
+    return headMovement;
+}
+int main() {
+    int tracks[] = {55, 58, 60, 70, 18};
+    int n = sizeof(tracks) / sizeof(tracks[0]);
+    int start = 50; // Starting position
+    bool direction = true; // Moving towards higher tracks
+    int averageHeadMovement;
+    averageHeadMovement = SCAN(tracks, n, start, direction) / n;
+    printf("Average head movement: %d\n", averageHeadMovement);
+    return 0;
+}
