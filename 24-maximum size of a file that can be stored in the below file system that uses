@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdint.h>
+#define DISK_BLOCK_SIZE 8192 
+#define POINTER_SIZE 4 
+#define DIRECT_BLOCKS 12
+#define SINGLE_INDIRECT_BLOCKS (DISK_BLOCK_SIZE / POINTER_SIZE)
+#define DOUBLE_INDIRECT_BLOCKS (DISK_BLOCK_SIZE / POINTER_SIZE * DISK_BLOCK_SIZE / POINTER_SIZE)
+#define TRIPLE_INDIRECT_BLOCKS (DISK_BLOCK_SIZE / POINTER_SIZE * DISK_BLOCK_SIZE / POINTER_SIZE * DISK_BLOCK_SIZE / POINTER_SIZE)
+
+int main() {
+    uint64_t maxFileSize = 0;
+    maxFileSize = DIRECT_BLOCKS * DISK_BLOCK_SIZE; // Direct blocks
+    maxFileSize += SINGLE_INDIRECT_BLOCKS * DISK_BLOCK_SIZE; 
+    maxFileSize += DOUBLE_INDIRECT_BLOCKS * DISK_BLOCK_SIZE; 
+    maxFileSize += TRIPLE_INDIRECT_BLOCKS * DISK_BLOCK_SIZE; 
+    printf("Maximum file size: %llu bytes\n", maxFileSize);
+    return 0;
+}
