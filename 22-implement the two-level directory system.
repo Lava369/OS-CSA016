@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_USERS 3
+#define MAX_FILES 3
+struct User {
+    char name[20];
+    char files[MAX_FILES][20];
+    int fileCount;
+};
+
+struct Directory {
+    struct User users[MAX_USERS];
+    int userCount;
+};
+
+int createUser(struct Directory* directory, char* name) {
+    if (directory->userCount >= MAX_USERS) {
+        printf("Maximum user limit reached.\n");
+        return -1;
+    }
+
+    struct User* newUser = &(directory->users[directory->userCount]);
+    strncpy(newUser->name, name, 20);
+    newUser->fileCount = 0;
+
+    directory->userCount++;
+
+    printf("User '%s' created successfully.\n", name);
+    return 0;
+}
+
+int createFile(struct Directory* directory, char* userName, char* fileName) {
+    int userIndex = -1;
+    for (int i = 0; i < directory->userCount; i++) {
+        if (strcmp(directory->users[i].name, userName) == 0) {
+            userIndex = i;
+            break;
+        }
+    }
+
+    if (userIndex == -1) {
+        printf("User '%s' does not exist.\n", userName);
+        return -1;
+    }
+
+    struct User* user = &(directory->users[userIndex]);
+    if (user->fileCount >= MAX_FILES) {
+        printf("User '%s' has reached the maximum file limit.\n", userName);
+        return -1;
+    }
+
+    strncpy(user->files[user->fileCount], fileName, 20);
+    user->fileCount++;
+
+    printf("File '%s' created successfully under user '%s'.\n", fileName, userName);
+    return 0;
+}
+
+int main() {
+    struct Directory directory;
+    directory.userCount = 0;
+    createUser(&directory, "user1");
+    createUser(&directory, "user2");
+    createUser(&directory, "user3");
+    createFile(&directory, "user1", "file1");
+    createFile(&directory, "user1", "file2");
+    createFile(&directory, "user1", "file3");
+
+    createFile(&directory, "user2", "file4");
+    createFile(&directory, "user2", "file5");
+
+    createFile(&directory, "user3", "file6");
+    createFile(&directory, "user3", "file7");
+
+    return 0;
+}
